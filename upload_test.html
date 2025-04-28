@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            display: none;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV Upload Test</h1>
+    <form id="uploadForm">
+        <div class="form-group">
+            <label for="file">Select CSV File:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+        </div>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Uploading...';
+            
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                resultDiv.innerHTML = 'Please select a file';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                // Log what we're about to send
+                console.log("Sending file:", file.name, file.size, file.type);
+                console.log("FormData entries:");
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + (pair[1] instanceof File ? 
+                        `File(${pair[1].name}, ${pair[1].size} bytes)` : pair[1]));
+                }
+                
+                const response = await fetch('http://localhost:1111/upload/', {
+                    method: 'POST',
+                    body: formData,
+                    // Do not set Content-Type header - the browser will set it with the boundary
+                });
+                
+                console.log("Response status:", response.status);
+                console.log("Response headers:", response.headers);
+                
+                // Get response as text first to debug
+                const responseText = await response.text();
+                console.log("Response text:", responseText);
+                
+                // Try to parse as JSON
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                    console.log("Parsed JSON:", data);
+                } catch (parseError) {
+                    console.error("Failed to parse response as JSON:", parseError);
+                    resultDiv.innerHTML = `
+                        <h3>Upload Response (not JSON)</h3>
+                        <pre>${responseText}</pre>
+                    `;
+                    return;
+                }
+                
+                // Show successful upload
+                resultDiv.innerHTML = `
+                    <h3>Upload Successful!</h3>
+                    <p>Dataset ID: ${data.id}</p>
+                    <p>Filename: ${data.filename}</p>
+                    <p>Upload Date: ${data.upload_date}</p>
+                    <h4>Full Response:</h4>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Upload Failed</h3>
+                    <p>Error: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+                console.error('Upload error:', error);
+            }
+        });
+    </script>
+</body>
+</html> 

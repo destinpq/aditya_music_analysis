@@ -1,0 +1,4 @@
+Upload a dataset using the existing endpoints
+Train ML models on specific target metrics
+Optionally perform hyperparameter tuning to improve performance
+Use the trained models to make predictions on new videos or analyze existing ones
