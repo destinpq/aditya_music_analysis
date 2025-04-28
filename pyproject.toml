@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["Backend", "Backend.fastapi_app"]
+
+[project]
+name = "aditya-music-analysis"
+version = "0.1.0"
+description = "Analytics platform for music performance data"
+requires-python = ">=3.11.0,<3.12.0"
+license = {text = "MIT"}
