@@ -10,6 +10,7 @@ An advanced YouTube analytics dashboard built with Next.js that connects to the 
 - Prediction capabilities for video performance
 - Earnings estimations and analytics
 - Dataset management
+- Secure database-based configuration storage (no environment variables)
 
 ## Backend Integration
 
@@ -122,6 +123,12 @@ yarn start
 ```
 
 ## Environment Variables
+
+The application now uses a database-based configuration system rather than environment variables for improved security. See the [Database Configuration Documentation](./docs/DB-CONFIG.md) for details on how to set up and use this system.
+
+### Legacy Environment Variables (for development only)
+
+These environment variables can be used during development, but in production, the database configuration system is used:
 
 - `NEXT_PUBLIC_API_BASE_URL`: Backend API endpoint URL
 - `NEXT_PUBLIC_ML_API_BASE_URL`: Optional separate ML API endpoint (if different from main API)

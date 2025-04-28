@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  env: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
-  },
+  // Environment variables are now loaded from database via app/utils/config-db.ts
   webpack: (config, { isServer }) => {
     // Fix for Plotly.js import issue
     config.resolve.alias = {
