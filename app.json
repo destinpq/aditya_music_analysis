@@ -1,0 +1,15 @@
+{
+  "name": "AdityaMusic",
+  "description": "Analytics platform for music performance data",
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "PYTHON_VERSION": {
+      "value": "3.11.8"
+    }
+  }
+}
